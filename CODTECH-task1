@@ -1,0 +1,43 @@
+from flask import Flask, render_template, request, redirect, url_for
+
+app = Flask(_name_)
+
+# Sample data for projects and blogs
+projects = [
+    {"title": "Portfolio Website", "description": "A responsive portfolio website with backend."},
+    {"title": "E-commerce App", "description": "An online shopping app with payment integration."}
+]
+
+blogs = [
+    {"title": "Why Learn Flask?", "content": "Flask is lightweight and easy to learn for web development."},
+    {"title": "Frontend vs Backend", "content": "Exploring the differences between frontend and backend development."}
+]
+
+@app.route("/")
+def home():
+    return render_template("index.html", projects=projects, blogs=blogs)
+
+@app.route("/projects")
+def project_page():
+    return render_template("projects.html", projects=projects)
+
+@app.route("/blog")
+def blog_page():
+    return render_template("blog.html", blogs=blogs)
+
+@app.route("/add", methods=["GET", "POST"])
+def add_content():
+    if request.method == "POST":
+        content_type = request.form["content_type"]
+        title = request.form["title"]
+        description = request.form["description"]
+
+        if content_type == "project":
+            projects.append({"title": title, "description": description})
+        elif content_type == "blog":
+            blogs.append({"title": title, "content": description})
+        return redirect(url_for("home"))
+    return render_template("add_content.html")
+
+if _name_ == "_main_":
+    app.run(debug=True)
